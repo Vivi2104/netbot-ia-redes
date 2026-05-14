@@ -103,3 +103,34 @@ body {
 #sendBtn:hover {
     background: #0056b3;
 }
+
+/* Estilos para listas dentro de las respuestas del bot */
+.bot-message ul, .bot-message ol {
+    margin-left: 20px;
+    padding-bottom: 5px;
+}
+
+/* Estilos para comandos o texto de código (Cisco CLI, IPs) */
+.bot-message code {
+    background-color: #272822;
+    color: #f8f8f2;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.9rem;
+}
+
+/* Bloques de código completos (cuando te dé un script o configuración larga) */
+.bot-message pre {
+    background-color: #272822;
+    padding: 10px;
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 10px 0;
+}
+
+.bot-message pre code {
+    background-color: transparent;
+    padding: 0;
+    color: #f8f8f2;
+}

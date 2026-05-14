@@ -1,7 +1,7 @@
 import { GoogleGenAI } from "https://esm.run/@google/genai";
 
 // 1. Configura tu API Key de Gemini
-const API_KEY = "AIzaSyBCi6Hab2XjznaYTkaz2a3js37tTxWOuS8"; 
+const API_KEY = ""; 
 const ai = new GoogleGenAI({ apiKey: API_KEY });
 
 // 2. Elementos del DOM
@@ -30,7 +30,17 @@ try {
 function appendMessage(text, sender) {
     const messageDiv = document.createElement('div');
     messageDiv.classList.add('message', `${sender}-message`);
-    messageDiv.innerText = text;
+    
+    // SI EL MENSAJE ES DEL BOT: Usamos marked.parse() para procesar negritas, listas y código
+    if (sender === 'bot') {
+        // Aseguramos que los saltos de línea se respeten correctamente
+        marked.setOptions({ breaks: true });
+        messageDiv.innerHTML = marked.parse(text);
+    } else {
+        // Si es el usuario, lo dejamos como texto plano por seguridad
+        messageDiv.innerText = text;
+    }
+    
     chatBox.appendChild(messageDiv);
     chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll al fondo
 }
