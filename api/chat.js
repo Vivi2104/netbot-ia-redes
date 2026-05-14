@@ -61,4 +61,4 @@ module.exports = async function handler(req, res) {
         console.error("Error en el servidor:", error);
         return res.status(500).json({ error: "Error al procesar la solicitud con Gemini" });
     }
-};
+};   
