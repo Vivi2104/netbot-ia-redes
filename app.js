@@ -45,14 +45,19 @@ async function handleSend() {
         const data = await response.json();
         typingIndicator.remove();
 
-        if (data.text) {
+        // Validación blindada: Verifica que los datos y el texto existan de forma correcta
+        if (data && data.text) {
             appendMessage(data.text, 'bot');
         } else {
-            appendMessage("Lo siento, ocurrió un error en la comunicación de datos.", 'bot');
+            appendMessage("Lo siento, la IA no devolvió un formato de texto válido.", 'bot');
         }
     } catch (error) {
         console.error("Error:", error);
-        typingIndicator.innerText = "Lo siento, ocurrió un error al conectar con el servidor.";
+        // Remueve el indicador de pensando si sigue colgado en el contenedor
+        if (typingIndicator.parentNode) {
+            typingIndicator.remove();
+        }
+        appendMessage("Lo siento, ocurrió un error al conectar con el servidor.", 'bot');
     }
 }
 
