@@ -1,8 +1,4 @@
 module.exports = async function handler(req, res) {
-    if (req.method !== 'POST') {
-        return res.status(405).json({ error: 'Método no permitido' });
-    }
-
     try {
         const { message } = req.body;
         const apiKey = process.env.GEMINI_API_KEY;
@@ -16,9 +12,16 @@ module.exports = async function handler(req, res) {
         });
 
         const data = await response.json();
-        const botReply = data.candidates[0].content.parts[0].text;
 
-        return res.status(200).json({ text: botReply });
+        // Este ajuste revisa con más cuidado dónde está el texto
+        if (data.candidates && data.candidates[0].content && data.candidates[0].content.parts) {
+            const botReply = data.candidates[0].content.parts[0].text;
+            return res.status(200).json({ text: botReply });
+        } else {
+            // Si la estructura es rara, imprimimos el error para verlo en Vercel
+            console.error("Estructura inesperada de Gemini:", JSON.stringify(data));
+            return res.status(200).json({ text: "La IA respondió, pero el formato fue inesperado. Intenta preguntar de nuevo." });
+        }
 
     } catch (error) {
         console.error("Error en el bot:", error);
