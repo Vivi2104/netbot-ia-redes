@@ -1,6 +1,7 @@
 const { GoogleGenAI } = require("@google/genai");
 
 module.exports = async function handler(req, res) {
+    // Manejar solo peticiones POST
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Método no permitido' });
     }
@@ -13,6 +14,7 @@ module.exports = async function handler(req, res) {
             return res.status(500).json({ error: "La API Key no está configurada en Vercel." });
         }
 
+        // Inicializamos el SDK oficial de Google AI
         const ai = new GoogleGenAI({ apiKey: apiKey });
 
         const response = await ai.models.generateContent({
@@ -26,7 +28,7 @@ module.exports = async function handler(req, res) {
             }
         });
 
-        // Enviamos la propiedad "text" limpia para que app.js la lea directo
+        // Extraemos la propiedad .text directamente del objeto de respuesta limpia
         return res.status(200).json({ text: response.text });
 
     } catch (error) {
