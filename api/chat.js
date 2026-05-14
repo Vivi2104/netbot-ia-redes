@@ -1,4 +1,5 @@
-export default async function handler(req, res) {
+// Usamos fetch nativo de Node.js (Vercel ya lo incluye por defecto)
+module.exports = async function handler(req, res) {
     // Manejar solo peticiones POST
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Método no permitido' });
@@ -8,10 +9,15 @@ export default async function handler(req, res) {
         const { message } = req.body;
         const apiKey = process.env.GEMINI_API_KEY;
 
-        // URL Oficial de la API de Gemini para procesamiento de texto
+        // Si por alguna razón la API Key no está cargada, avisamos de inmediato
+        if (!apiKey) {
+            return res.status(500).json({ error: "La API Key no está configurada en Vercel." });
+        }
+
+        // Endpoint oficial de la API de Gemini (v1beta) usando gemini-2.5-flash
         const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
 
-        // Petición directa usando fetch nativo
+        // Petición HTTP directa
         const response = await fetch(url, {
             method: 'POST',
             headers: {
@@ -32,16 +38,17 @@ export default async function handler(req, res) {
 
         const data = await response.json();
 
-        // Extraer la respuesta de la estructura de la API de Google
-        if (data.candidates && data.candidates[0].content.parts[0].text) {
-            return res.status(200).json({ text: data.candidates[0].content.parts[0].text });
+        // Estructura de extracción segura para las respuestas de Gemini
+        if (data.candidates && data.candidates[0] && data.candidates[0].content.parts[0]) {
+            const botText = data.candidates[0].content.parts[0].text;
+            return res.status(200).json({ text: botText });
         } else {
-            console.error("Respuesta inesperada de Google:", data);
-            return res.status(500).json({ error: "Estructura de respuesta inválida" });
+            console.error("Error en formato de Google:", data);
+            return res.status(500).json({ error: "No se recibió texto de la IA." });
         }
 
     } catch (error) {
-        console.error("Error en el servidor:", error);
-        return res.status(500).json({ error: "Error al procesar la solicitud con Gemini" });
+        console.error("Error crítico en backend:", error);
+        return res.status(500).json({ error: "Error interno al procesar la petición." });
     }
-}
+};
