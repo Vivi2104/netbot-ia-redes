@@ -89,6 +89,18 @@ body {
     font-size: 0.95rem;
     line-height: 1.4;
     position: relative; /* Necesario para que el botón "Copiar" flote correctamente */
+    animation: aparecerMensaje 0.3s ease-out forwards;
+}
+
+@keyframes aparecerMensaje {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .bot-message {
@@ -205,28 +217,45 @@ body {
     font-size: 0.9em;
 }
 
-/* Tablas Markdown adaptadas */
+/* Tablas Markdown Rediseñadas */
 .message-content table {
     width: 100%;
     border-collapse: collapse;
-    margin: 10px 0;
-    font-size: 0.85em;
+    margin: 15px 0;
+    font-size: 0.9rem;
     display: block;
     overflow-x: auto;
-    background-color: #f8f9fa;
-    border-radius: 4px;
+    background-color: #ffffff;
+    border-radius: 8px; /* Bordes redondeados más suaves */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Sombra ligera para darle profundidad */
     position: relative;
 }
 
+/* Estilo para las celdas (encabezado y cuerpo) */
 .message-content th, .message-content td {
-    border: 1px solid #dee2e6;
-    padding: 8px 12px;
+    padding: 10px 14px; /* Más espacio interno para que respiren los comandos */
     text-align: left;
+    border-bottom: 1px solid #e9ecef; /* Líneas divisorias muy tenues en vez de bordes toscos */
 }
 
+/* Estilo exclusivo del encabezado de la tabla */
 .message-content th {
-    background-color: #e9ecef;
-    font-weight: bold;
+    background-color: #f1f3f5; /* Gris limpio y profesional */
+    color: #495057;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+}
+
+/* Efecto de filas alternas (Zebra Striping) */
+.message-content tr:nth-child(even) {
+    background-color: #f8f9fa; /* Una fila blanca, una grisácea tenue */
+}
+
+/* Evita que los comandos inline dentro de las tablas se rompan u opaquen */
+.message-content td code {
+    white-space: nowrap;
 }
 
 /* Diseño del Botón Flotante para Copiar */
