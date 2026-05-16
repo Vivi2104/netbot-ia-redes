@@ -46,12 +46,20 @@ function addCopyButtons(container) {
 }
 
 // Función para agregar mensajes a la pantalla
+// Función para agregar mensajes a la pantalla (CORREGIDA PARA TABLAS)
 function appendMessage(text, sender) {
     const messageDiv = document.createElement('div');
     messageDiv.classList.add('message', `${sender}-message`);
     
     if (sender === 'bot') {
-        marked.setOptions({ breaks: true });
+        // CONFIGURACIÓN FORZADA PARA QUE INTERPRETE LAS TABLAS (| columna |)
+        marked.setOptions({ 
+            breaks: true,
+            gfm: true, // Activa GitHub Flavored Markdown (Tablas)
+            pedantic: false
+        });
+        
+        // Convertimos el Markdown a HTML real
         messageDiv.innerHTML = marked.parse(text);
         
         // LE INYECTAMOS LA LÓGICA DE COPIAR SOLO A LOS MENSAJES DEL BOT
