@@ -2,6 +2,49 @@ const chatBox = document.getElementById('chatBox');
 const userInput = document.getElementById('userInput');
 const sendBtn = document.getElementById('sendBtn');
 
+// Variable global para almacenar el modo activo (por defecto: profesor)
+let currentMode = "profesor";
+
+// === PUNTO 1: CONTROL DE CAMBIO DE MODOS ===
+document.querySelectorAll('.mode-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        currentMode = e.target.getAttribute('data-mode');
+    });
+});
+
+// === PUNTO 2: LÓGICA DE SUGERENCIAS RÁPIDAS ===
+document.querySelectorAll('.suggest-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        userInput.value = e.target.innerText;
+        handleSend(); // Ejecuta tu función existente de enviar
+    });
+});
+
+// === PUNTO 3: BOTÓN DE COPIAR CÓDIGO / TABLAS ===
+function addCopyButtons(container) {
+    // Busca bloques de código y tablas dentro de la burbuja que se acaba de crear
+    container.querySelectorAll('pre, table').forEach(block => {
+        if (block.querySelector('.copy-code-btn')) return;
+
+        const button = document.createElement('button');
+        button.className = 'copy-code-btn';
+        button.innerText = 'Copiar';
+
+        button.addEventListener('click', () => {
+            const textToCopy = block.innerText.replace('Copiar', '').trim();
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                button.innerText = '¡Copiado!';
+                setTimeout(() => button.innerText = 'Copiar', 2000);
+            });
+        });
+
+        block.style.position = 'relative';
+        block.appendChild(button);
+    });
+}
+
 // Función para agregar mensajes a la pantalla
 function appendMessage(text, sender) {
     const messageDiv = document.createElement('div');
@@ -10,6 +53,11 @@ function appendMessage(text, sender) {
     if (sender === 'bot') {
         marked.setOptions({ breaks: true });
         messageDiv.innerHTML = marked.parse(text);
+        
+        // LE INYECTAMOS LA LÓGICA DE COPIAR SOLO A LOS MENSAJES DEL BOT
+        // Agregamos una clase contenedora para los estilos del CSS
+        messageDiv.classList.add('message-content');
+        addCopyButtons(messageDiv);
     } else {
         messageDiv.innerText = text;
     }
@@ -33,19 +81,21 @@ async function handleSend() {
     chatBox.scrollTop = chatBox.scrollHeight;
 
     try {
-        // Hacemos una petición directa a nuestra Serverless Function de Vercel
         const response = await fetch('/api/chat', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ message: text })
+            // === PUNTO 5: ENVIAMOS EL MODO ACTIVO EN EL BODY ===
+            body: JSON.stringify({ 
+                message: text,
+                mode: currentMode 
+            })
         });
 
         const data = await response.json();
         typingIndicator.remove();
 
-        // Validación blindada: Verifica que los datos y el texto existan de forma correcta
         if (data && data.text) {
             appendMessage(data.text, 'bot');
         } else {
@@ -53,7 +103,6 @@ async function handleSend() {
         }
     } catch (error) {
         console.error("Error:", error);
-        // Remueve el indicador de pensando si sigue colgado en el contenedor
         if (typingIndicator.parentNode) {
             typingIndicator.remove();
         }
