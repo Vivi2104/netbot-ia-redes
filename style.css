@@ -16,7 +16,7 @@ body {
 .chat-container {
     width: 450px;
     max-width: 100%;
-    height: 600px;
+    height: 650px; /* Ajustado ligeramente para dar espacio cómodo a los nuevos botones */
     background: #ffffff;
     border-radius: 12px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
@@ -41,6 +41,38 @@ body {
     opacity: 0.8;
 }
 
+/* Modos de Redes (Estilo interno en la parte superior) */
+.network-modes {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 10px;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+    flex-shrink: 0;
+}
+
+.mode-btn {
+    background-color: #fff;
+    border: 1px solid #ced4da;
+    padding: 5px 10px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.8em;
+    transition: all 0.2s ease;
+}
+
+.mode-btn:hover {
+    background-color: #e9ecef;
+}
+
+.mode-btn.active {
+    background-color: #003366;
+    color: #fff;
+    border-color: #003366;
+    font-weight: bold;
+}
+
 .chat-box {
     flex: 1;
     padding: 20px;
@@ -51,11 +83,12 @@ body {
 }
 
 .message {
-    max-width: 80%;
+    max-width: 85%;
     padding: 10px 15px;
     border-radius: 15px;
     font-size: 0.95rem;
     line-height: 1.4;
+    position: relative; /* Necesario para que el botón "Copiar" flote correctamente */
 }
 
 .bot-message {
@@ -72,11 +105,45 @@ body {
     border-bottom-right-radius: 2px;
 }
 
+/* Sugerencias Rápidas (Estilo deslizable de forma horizontal sobre el input) */
+.suggestions-container {
+    display: flex;
+    gap: 8px;
+    padding: 8px 15px;
+    overflow-x: auto;
+    white-space: nowrap;
+    background-color: #f8f9fa;
+    border-top: 1px solid #dee2e6;
+    flex-shrink: 0;
+}
+
+/* Oculta la barra de desplazamiento ruda en navegadores para que se vea estético */
+.suggestions-container::-webkit-scrollbar {
+    display: none;
+}
+
+.suggest-btn {
+    background-color: #e3f2fd;
+    color: #0d47a1;
+    border: 1px solid #bbdefb;
+    padding: 6px 12px;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 0.8em;
+    flex-shrink: 0;
+    transition: background-color 0.2s;
+}
+
+.suggest-btn:hover {
+    background-color: #bbdefb;
+}
+
 .chat-input-area {
     display: flex;
     padding: 15px;
-    background: #f8f9fa;
+    background: #ffffff;
     border-top: 1px solid #dee2e6;
+    flex-shrink: 0;
 }
 
 #userInput {
@@ -104,50 +171,53 @@ body {
     background: #0056b3;
 }
 
-/* Estilos para listas dentro de las respuestas del bot */
+/* Estilos de formato interno del Bot */
 .bot-message ul, .bot-message ol {
     margin-left: 20px;
     padding-bottom: 5px;
 }
 
-/* Estilos para comandos o texto de código (Cisco CLI, IPs) */
-.bot-message code {
-    background-color: #272822;
-    color: #f8f8f2;
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 0.9rem;
-}
-
-/* Bloques de código completos (cuando te dé un script o configuración larga) */
+/* Bloques de código pre-formateados */
 .bot-message pre {
     background-color: #272822;
-    padding: 10px;
+    padding: 25px 10px 10px 10px; /* Espacio extra arriba para que no tape el botón de copiar */
     border-radius: 6px;
     overflow-x: auto;
     margin: 10px 0;
+    position: relative;
 }
 
 .bot-message pre code {
     background-color: transparent;
     padding: 0;
     color: #f8f8f2;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.9rem;
 }
 
-/* Hace que las tablas no se desborden del contenedor del chat */
+/* Elementos de código inline */
+.bot-message :not(pre) > code {
+    background-color: #e8e8e8;
+    color: #c7254e;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 0.9em;
+}
+
+/* Tablas Markdown adaptadas */
 .message-content table {
     width: 100%;
     border-collapse: collapse;
     margin: 10px 0;
-    font-size: 0.9em;
-    display: block; /* Permite el desplazamiento horizontal si la tabla es muy ancha */
+    font-size: 0.85em;
+    display: block;
     overflow-x: auto;
     background-color: #f8f9fa;
     border-radius: 4px;
+    position: relative;
 }
 
-/* Le da un toque limpio a los encabezados y celdas */
 .message-content th, .message-content td {
     border: 1px solid #dee2e6;
     padding: 8px 12px;
@@ -159,90 +229,24 @@ body {
     font-weight: bold;
 }
 
-/* Estilo para los bloques de código como "enable" */
-.message-content code {
-    background-color: #e8e8e8;
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-family: monospace;
-}
-
-/* Estilos para los Modos de Redes (Arriba) */
-.network-modes {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    padding: 10px;
-    background-color: #f1f3f5;
-    border-bottom: 1px solid #dee2e6;
-    flex-wrap: wrap;
-}
-
-.mode-btn {
-    background-color: #fff;
-    border: 1px solid #ced4da;
-    padding: 6px 12px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 0.85em;
-    transition: all 0.2s ease;
-}
-
-.mode-btn:hover {
-    background-color: #e9ecef;
-}
-
-.mode-btn.active {
-    background-color: #0056b3;
-    color: #fff;
-    border-color: #0056b3;
-    font-weight: bold;
-}
-
-/* Estilos para las Sugerencias Rápidas (Abajo) */
-.suggestions-container {
-    display: flex;
-    gap: 8px;
-    padding: 8px 15px;
-    overflow-x: auto;
-    white-space: nowrap;
-    background-color: #f8f9fa;
-}
-
-.suggest-btn {
-    background-color: #e3f2fd;
-    color: #0d47a1;
-    border: 1px solid #bbdefb;
-    padding: 6px 12px;
-    border-radius: 15px;
-    cursor: pointer;
-    font-size: 0.8em;
-    flex-shrink: 0;
-}
-
-.suggest-btn:hover {
-    background-color: #bbdefb;
-}
-
-/* Contenedor relativo para el botón de copiar en bloques de código */
-.message-content pre {
-    position: relative;
-    padding-top: 30px; /* Espacio para el botón */
-}
-
-/* Botón de Copiar */
+/* Diseño del Botón Flotante para Copiar */
 .copy-code-btn {
     position: absolute;
-    top: 5px;
-    right: 5px;
+    top: 4px;
+    right: 4px;
     background-color: #343a40;
     color: #fff;
     border: 1px solid #6c757d;
-    padding: 3px 8px;
+    padding: 2px 6px;
     border-radius: 4px;
-    font-size: 0.75em;
+    font-size: 0.7em;
     cursor: pointer;
+    z-index: 5;
+    opacity: 0.8;
+    transition: opacity 0.2s;
 }
+
 .copy-code-btn:hover {
-    background-color: #495057;
+    opacity: 1;
+    background-color: #1d2124;
 }
