@@ -55,7 +55,6 @@ function appendMessage(text, sender) {
         messageDiv.innerHTML = marked.parse(text);
         
         // LE INYECTAMOS LA LÓGICA DE COPIAR SOLO A LOS MENSAJES DEL BOT
-        // Agregamos una clase contenedora para los estilos del CSS
         messageDiv.classList.add('message-content');
         addCopyButtons(messageDiv);
     } else {
@@ -74,9 +73,11 @@ async function handleSend() {
     appendMessage(text, 'user');
     userInput.value = '';
 
+    // ====== INDICADOR DE ESCRITURA ANIMADO ======
     const typingIndicator = document.createElement('div');
-    typingIndicator.classList.add('message', 'bot-message');
-    typingIndicator.innerText = "Pensando...";
+    typingIndicator.classList.add('message', 'bot-message', 'typing-indicator');
+    typingIndicator.innerHTML = '<span></span><span></span><span></span>';
+    
     chatBox.appendChild(typingIndicator);
     chatBox.scrollTop = chatBox.scrollHeight;
 
@@ -86,7 +87,6 @@ async function handleSend() {
             headers: {
                 'Content-Type': 'application/json'
             },
-            // === PUNTO 5: ENVIAMOS EL MODO ACTIVO EN EL BODY ===
             body: JSON.stringify({ 
                 message: text,
                 mode: currentMode 
@@ -94,7 +94,7 @@ async function handleSend() {
         });
 
         const data = await response.json();
-        typingIndicator.remove();
+        typingIndicator.remove(); // Quitamos los puntitos antes de mostrar la respuesta
 
         if (data && data.text) {
             appendMessage(data.text, 'bot');
@@ -114,21 +114,3 @@ sendBtn.addEventListener('click', handleSend);
 userInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') handleSend();
 });
-
-// ... (Código anterior de handleSend igual) ...
-
-appendMessage(text, 'user');
-userInput.value = '';
-
-// ====== AQUÍ MODIFICAMOS EL INDICADOR DE ESCRITURA ======
-const typingIndicator = document.createElement('div');
-// Le ponemos la clase 'typing-indicator' para que el CSS le dé la animación
-typingIndicator.classList.add('message', 'bot-message', 'typing-indicator');
-// Le inyectamos los 3 puntitos (cada span es un puntito)
-typingIndicator.innerHTML = '<span></span><span></span><span></span>';
-
-chatBox.appendChild(typingIndicator);
-chatBox.scrollTop = chatBox.scrollHeight;
-
-// En el bloque try / catch, tu código ya tiene el typingIndicator.remove(), 
-// así que no necesitas moverle a nada más abajo.
