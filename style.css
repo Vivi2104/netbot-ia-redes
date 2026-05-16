@@ -166,3 +166,83 @@ body {
     border-radius: 4px;
     font-family: monospace;
 }
+
+/* Estilos para los Modos de Redes (Arriba) */
+.network-modes {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px;
+    background-color: #f1f3f5;
+    border-bottom: 1px solid #dee2e6;
+    flex-wrap: wrap;
+}
+
+.mode-btn {
+    background-color: #fff;
+    border: 1px solid #ced4da;
+    padding: 6px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.85em;
+    transition: all 0.2s ease;
+}
+
+.mode-btn:hover {
+    background-color: #e9ecef;
+}
+
+.mode-btn.active {
+    background-color: #0056b3;
+    color: #fff;
+    border-color: #0056b3;
+    font-weight: bold;
+}
+
+/* Estilos para las Sugerencias Rápidas (Abajo) */
+.suggestions-container {
+    display: flex;
+    gap: 8px;
+    padding: 8px 15px;
+    overflow-x: auto;
+    white-space: nowrap;
+    background-color: #f8f9fa;
+}
+
+.suggest-btn {
+    background-color: #e3f2fd;
+    color: #0d47a1;
+    border: 1px solid #bbdefb;
+    padding: 6px 12px;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 0.8em;
+    flex-shrink: 0;
+}
+
+.suggest-btn:hover {
+    background-color: #bbdefb;
+}
+
+/* Contenedor relativo para el botón de copiar en bloques de código */
+.message-content pre {
+    position: relative;
+    padding-top: 30px; /* Espacio para el botón */
+}
+
+/* Botón de Copiar */
+.copy-code-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: #343a40;
+    color: #fff;
+    border: 1px solid #6c757d;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.75em;
+    cursor: pointer;
+}
+.copy-code-btn:hover {
+    background-color: #495057;
+}
