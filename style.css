@@ -134,3 +134,35 @@ body {
     padding: 0;
     color: #f8f8f2;
 }
+
+/* Hace que las tablas no se desborden del contenedor del chat */
+.message-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0;
+    font-size: 0.9em;
+    display: block; /* Permite el desplazamiento horizontal si la tabla es muy ancha */
+    overflow-x: auto;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+}
+
+/* Le da un toque limpio a los encabezados y celdas */
+.message-content th, .message-content td {
+    border: 1px solid #dee2e6;
+    padding: 8px 12px;
+    text-align: left;
+}
+
+.message-content th {
+    background-color: #e9ecef;
+    font-weight: bold;
+}
+
+/* Estilo para los bloques de código como "enable" */
+.message-content code {
+    background-color: #e8e8e8;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: monospace;
+}
