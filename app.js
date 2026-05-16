@@ -114,3 +114,21 @@ sendBtn.addEventListener('click', handleSend);
 userInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') handleSend();
 });
+
+// ... (Código anterior de handleSend igual) ...
+
+appendMessage(text, 'user');
+userInput.value = '';
+
+// ====== AQUÍ MODIFICAMOS EL INDICADOR DE ESCRITURA ======
+const typingIndicator = document.createElement('div');
+// Le ponemos la clase 'typing-indicator' para que el CSS le dé la animación
+typingIndicator.classList.add('message', 'bot-message', 'typing-indicator');
+// Le inyectamos los 3 puntitos (cada span es un puntito)
+typingIndicator.innerHTML = '<span></span><span></span><span></span>';
+
+chatBox.appendChild(typingIndicator);
+chatBox.scrollTop = chatBox.scrollHeight;
+
+// En el bloque try / catch, tu código ya tiene el typingIndicator.remove(), 
+// así que no necesitas moverle a nada más abajo.
